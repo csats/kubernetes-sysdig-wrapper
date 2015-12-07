@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: sysdig-wrapper
+spec:
+  template:
+    metadata:
+      labels:
+        name: sysdig-wrapper
+    spec:
+      volumes:
+        - name: dockersock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: sysdig-api-key
+          secret:
+            secretName: sysdig-api-key
+      containers:
+        - imagePullPolicy: Always
+          name: sysdig-wrapper
+          image: csats/sysdig-wrapper
+          volumeMounts:
+            - name: dockersock
+              mountPath: /var/run/docker.sock
+            - name: sysdig-api-key
+              mountPath: /key
+

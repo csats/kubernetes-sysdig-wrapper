@@ -1,0 +1,17 @@
+#!/bin/sh
+
+docker rm -f sysdig-agent
+
+docker run \
+  --name sysdig-agent \
+  --privileged \
+  --net host \
+  --pid host \
+  --restart always \
+  -e ACCESS_KEY="`cat /key/sysdig-api-key.txt`" \
+  -v /var/run/docker.sock:/host/var/run/docker.sock \
+  -v /dev:/host/dev \
+  -v /proc:/host/proc:ro \
+  -v /boot:/host/boot:ro \
+  -v /lib/modules:/host/lib/modules:ro \
+  -v /usr:/host/usr:ro sysdig/agent
